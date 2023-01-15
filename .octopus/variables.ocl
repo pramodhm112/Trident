@@ -27,5 +27,5 @@ variable "ConnectionStrings:Database" {
 }
 
 variable "Project.Connection.String" {
-    value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=#{Project.Database.Name}" {}
+    value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=Trident_Development" {}
 }
