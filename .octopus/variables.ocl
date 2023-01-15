@@ -22,10 +22,10 @@ variable "Octopus.ServiceNow.ChangeRequest.Number" {
     }
 }
 
-variable "Project.Connection.String" {
-    value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=#{Project.Database.User.Name}" {}
-}
-
 variable "ConnectionStrings:Database" {
     value "#{Project.Connection.String}" {}
+}
+
+variable "Project.Connection.String" {
+    value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=Trident_$environmentName" {}
 }
