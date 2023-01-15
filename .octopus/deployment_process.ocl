@@ -1,5 +1,5 @@
 step "run-the-trident-database-creattion-runbook" {
-    name = "Run the Trident Database Creattion Runbook"
+    name = "Run Create Trident Database Runbook"
 
     action {
         properties = {
