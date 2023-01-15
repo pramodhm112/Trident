@@ -38,3 +38,7 @@ variable "Octopus.ServiceNow.ChangeRequest.Number" {
         }
     }
 }
+
+variable "Runbook.API.Key" {
+    value "API-POXHJFD3HAEJBZ3JZPWV4RNNBENSOV" {}
+}
