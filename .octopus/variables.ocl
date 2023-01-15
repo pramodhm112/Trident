@@ -39,10 +39,10 @@ variable "Runbook.API.Key" {
     value "API-POXHJFD3HAEJBZ3JZPWV4RNNBENSOV" {}
 }
 
-variable "ConnectionStrings:Database" {
-    value "Project.Connection.String" {}
-}
-
 variable "Project.Connection.String" {
     value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=#{Project.Database.User.Name}" {}
+}
+
+variable "ConnectionStrings:Database" {
+    value "#{Project.Connection.String}" {}
 }
