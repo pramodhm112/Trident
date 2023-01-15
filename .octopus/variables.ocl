@@ -7,24 +7,6 @@ variable "Project.Database.Name" {
     }
 }
 
-variable "Project.Database.User.Name" {
-    value "Trident_User_Dev" {
-        environment = ["development"]
-    }
-
-    value "Trident_User_QA" {
-        environment = ["qa"]
-    }
-
-    value "Trident_User_Staging" {
-        environment = ["staging"]
-    }
-
-    value "Trident_User_Prod" {
-        environment = ["production"]
-    }
-}
-
 variable "Octopus.ServiceNow.ChangeRequest.Number" {
     value {
         environment = ["production"]
