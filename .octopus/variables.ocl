@@ -4,7 +4,9 @@ variable "Project.Database.Name" {
         environment = ["development", "qa", "staging"]
     }
 
-    value "Trident" {}
+    value "Trident" {
+        environment = ["production"]
+    }
 }
 
 variable "Octopus.ServiceNow.ChangeRequest.Number" {
@@ -26,10 +28,14 @@ variable "ConnectionStrings:Database" {
     value "#{Project.Connection.String}" {}
 }
 
-variable "Project.Connection.String" {
-    value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=Trident_Development" {}
-}
-
 variable "Project.Database.Report.Path:" {
     value "C:\\DatabaseReports\\#{Octopus.Environment.Name}" {}
+}
+
+variable "Project.Database.Server.Name" {
+    value "(localdb)\\MSSQLLocalDB" {}
+}
+
+variable "Project.Connection.String" {
+    value "Server=#{Project.Database.Server.Name};Integrated Security=true;Database=#{Project.Database.Name}" {}
 }
