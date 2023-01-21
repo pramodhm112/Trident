@@ -41,5 +41,5 @@ variable "Project.Database.Report.Path" {
 }
 
 variable "Project.Database.ApprovalRequired" {
-    value "#{Octopus.Action[Auto-Approve Database Delta Script].Output.ApprovalRequired}" {}
+    value "#{Octopus.Action[Approve Database Delta Script].Output.ApprovalRequired}" {}
 }
