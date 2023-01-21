@@ -29,3 +29,7 @@ variable "ConnectionStrings:Database" {
 variable "Project.Connection.String" {
     value "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Database=Trident_Development" {}
 }
+
+variable "Project.Database.Report.Path:" {
+    value "C:\\DatabaseReports\\#{Octopus.Environment.Name}" {}
+}
