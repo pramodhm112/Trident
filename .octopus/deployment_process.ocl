@@ -16,21 +16,6 @@ step "calculate-deployment-mode" {
     }
 }
 
-step "enable-maintenance-mode" {
-    name = "Enable Maintenance Mode"
-
-    action {
-        action_type = "Octopus.Script"
-        properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Enable Maintenance Mode\""
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "default-worker-pool-1"
-    }
-}
-
 step "run-the-trident-database-creattion-runbook" {
     condition = "Variable"
     name = "Run Create Trident Database Runbook"
@@ -222,26 +207,36 @@ step "deploy-trident-web" {
     }
 }
 
-step "verify-trident-application" {
-    name = "Verify Trident Application"
+step "verify-application" {
+    name = "Verify application"
 
     action {
-        action_type = "Octopus.Manual"
-        channels = ["hotfix"]
+        action_type = "Octopus.Script"
         properties = {
-            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
-            Octopus.Action.Manual.Instructions = "Please verify the Trident application"
-            Octopus.Action.Manual.ResponsibleTeamIds = "qa,developers,global/octopus-managers"
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $randomNumber = Get-Random -Minimum 1 -Maximum 100
+                
+                Write-Host "The random number is $randomNumber.  If it is above 90, this will fail the step."
+                if ($randomNumber -ge 90)
+                {
+                	Write-Host "An error occurred verifying the application."
+                    exit 1
+                }
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
         }
-        worker_pool_variable = ""
+        worker_pool = "default-worker-pool-1"
     }
 }
 
 step "disable-maintenance-mode" {
-    name = "Disable Maintenance Mode"
+    name = "Update load balancer"
 
     action {
         action_type = "Octopus.Script"
+        notes = "**Always runs**"
         properties = {
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = "Write-Highlight \"Disable Maintenance Mode\""
