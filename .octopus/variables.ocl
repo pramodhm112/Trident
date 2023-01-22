@@ -1,14 +1,3 @@
-variable "Project.Database.Name" {
-    value "Trident_#{Octopus.Environment.Name}" {
-        description = ""
-        environment = ["development", "qa", "staging"]
-    }
-
-    value "Trident" {
-        environment = ["production"]
-    }
-}
-
 variable "Octopus.ServiceNow.ChangeRequest.Number" {
     value {
         environment = ["production"]
@@ -42,4 +31,15 @@ variable "Project.Database.Report.Path" {
 
 variable "Project.Database.ApprovalRequired" {
     value "#{Octopus.Action[Auto-Approve Database Delta Script].Output.ApprovalRequired}" {}
+}
+
+variable "Project.Database.Name" {
+    value "Trident_#{Octopus.Environment.Name}_#{Retail.Tenant.ShortName}" {
+        description = ""
+        environment = ["development", "qa", "staging"]
+    }
+
+    value "Trident_#{Retail.Tenant.ShortName}" {
+        environment = ["production"]
+    }
 }
