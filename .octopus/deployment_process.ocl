@@ -16,6 +16,21 @@ step "calculate-deployment-mode" {
     }
 }
 
+step "enable-maintenance-mode" {
+    name = "Enable Maintenance Mode"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Enable Maintenance Mode\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "default-worker-pool-1"
+    }
+}
+
 step "run-the-trident-database-creattion-runbook" {
     condition = "Variable"
     name = "Run Create Trident Database Runbook"
@@ -125,6 +140,7 @@ step "approve-database-delta-script" {
 
     action {
         action_type = "Octopus.Manual"
+        environments = ["staging"]
         notes = "**Runs on Deployments Only**"
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "True"
@@ -175,32 +191,13 @@ step "deploy-the-database-changes" {
 }
 
 step "deploy-trident-web" {
-    name = "Deploy Trident Website"
+    name = "Deploy Trident Web"
     properties = {
-        Octopus.Action.MaxParallelism = "1"
         Octopus.Action.TargetRoles = "trident-web"
     }
 
-    action "remove-from-load-balancer" {
-        action_type = "Octopus.Script"
-        environments = ["staging", "production"]
-        name = "Remove from Load Balancer"
-        properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                $machineName = $OctopusParameters["Octopus.Machine.Name"]
-                
-                Write-Host "Remove $machineName from a Load Balancer."
-            EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "default-worker-pool-1"
-    }
-
-    action "deploy-trident-web" {
+    action {
         action_type = "Octopus.TentaclePackage"
-        name = "Deploy Trident Web"
         properties = {
             Octopus.Action.EnabledFeatures = "Octopus.Features.JsonConfigurationVariables"
             Octopus.Action.Package.DownloadOnTentacle = "False"
@@ -219,18 +216,31 @@ step "deploy-trident-web" {
             }
         }
     }
+}
 
-    action "remove-from-load-balancer-clone-1" {
+step "verify-trident-application" {
+    name = "Verify Trident Application"
+
+    action {
+        action_type = "Octopus.Manual"
+        channels = ["hotfix"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Please verify the Trident application"
+            Octopus.Action.Manual.ResponsibleTeamIds = "qa,developers,global/octopus-managers"
+        }
+        worker_pool_variable = ""
+    }
+}
+
+step "disable-maintenance-mode" {
+    name = "Disable Maintenance Mode"
+
+    action {
         action_type = "Octopus.Script"
-        environments = ["staging", "production"]
-        name = "Add to Load Balancer"
         properties = {
             Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                $machineName = $OctopusParameters["Octopus.Machine.Name"]
-                
-                Write-Host "Add $machineName back to the Load Balancer."
-            EOT
+            Octopus.Action.Script.ScriptBody = "Write-Highlight \"Disable Maintenance Mode\""
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
