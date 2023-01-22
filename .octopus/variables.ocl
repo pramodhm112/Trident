@@ -43,3 +43,7 @@ variable "Project.Database.Name" {
         environment = ["production"]
     }
 }
+
+variable "Creator.Name" {
+    value "Pramodh" {}
+}
