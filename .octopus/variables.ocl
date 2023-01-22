@@ -10,23 +10,8 @@ variable "Project.Connection.String" {
     value "Server=#{Project.Database.Server.Name};Integrated Security=true;Database=#{Project.Database.Name}" {}
 }
 
-variable "Project.Database.Report.Path" {
-    value "C:\\DatabaseReports\\#{Octopus.Environment.Name}" {}
-}
-
 variable "Project.Database.ApprovalRequired" {
     value "#{Octopus.Action[Auto-Approve Database Delta Script].Output.ApprovalRequired}" {}
-}
-
-variable "Project.Database.Name" {
-    value "Trident_#{Octopus.Environment.Name}_#{Retail.Tenant.ShortName}" {
-        description = ""
-        environment = ["development", "qa", "staging"]
-    }
-
-    value "Trident_#{Retail.Tenant.ShortName}" {
-        environment = ["production", "production-blue", "production-green"]
-    }
 }
 
 variable "Creator.Name" {
@@ -45,5 +30,33 @@ variable "Octopus.ServiceNow.ChangeRequest.Number" {
             label = "ServiceNow Change Request "
             required = true
         }
+    }
+}
+
+variable "Project.Database.Name" {
+    value "Trident_#{Octopus.Environment.Name}_#{Retail.Tenant.ShortName}" {
+        description = ""
+        environment = ["development", "qa"]
+    }
+
+    value "Trident_#{Retail.Tenant.ShortName}" {}
+
+    value "Trident_Staging_#{Retail.Tenant.ShortName}" {
+        description = ""
+        environment = ["staging-blue", "staging-green"]
+    }
+}
+
+variable "Project.Database.Report.Path" {
+    value "C:\\DatabaseReports\\#{Octopus.Environment.Name}#{Retail.Tenant.ShortName}" {}
+
+    value "C:\\DatabaseReports\\Production\\#{Retail.Tenant.ShortName}" {
+        description = ""
+        environment = ["production-blue", "production-green"]
+    }
+
+    value "C:\\DatabaseReports\\Staging\\#{Retail.Tenant.ShortName}" {
+        description = ""
+        environment = ["staging-blue", "staging-green"]
     }
 }
