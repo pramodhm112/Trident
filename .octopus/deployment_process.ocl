@@ -60,6 +60,7 @@ step "generate-database-delta-report" {
 
     action {
         action_type = "Octopus.Script"
+        notes = "**Runs on Deployments Only**"
         properties = {
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
@@ -102,6 +103,7 @@ step "auto-approve-database-delta-script" {
     }
 
     action {
+        notes = "**Runs on Deployments Only**"
         properties = {
             Databases.AutoApproval.ReportPath = "#{Project.Database.Report.Path}\\UpgradeReport.html"
             Databases.AutoApprove.CommandsIndicatingChange = "#{SQL.Verification.Change.List}"
@@ -123,6 +125,7 @@ step "approve-database-delta-script" {
 
     action {
         action_type = "Octopus.Manual"
+        notes = "**Runs on Deployments Only**"
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "True"
             Octopus.Action.Manual.Instructions = "Please approve the database delta script found in the artifacts section"
@@ -141,6 +144,7 @@ step "deploy-the-database-changes" {
 
     action {
         action_type = "Octopus.Script"
+        notes = "**Runs on Deployments Only**"
         properties = {
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
