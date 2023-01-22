@@ -104,7 +104,7 @@ step "auto-approve-database-delta-script" {
     }
 
     action {
-        environments = ["staging"]
+        environments = ["staging", "staging-blue", "staging-green"]
         notes = "**Runs on Deployments Only**"
         properties = {
             Databases.AutoApproval.ReportPath = "#{Project.Database.Report.Path}\\UpgradeReport.html"
@@ -128,7 +128,7 @@ step "approve-database-delta-script" {
 
     action {
         action_type = "Octopus.Manual"
-        environments = ["staging"]
+        environments = ["staging", "staging-blue", "staging-green"]
         notes = "**Runs on Deployments Only**"
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "True"
