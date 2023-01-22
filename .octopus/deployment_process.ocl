@@ -119,6 +119,7 @@ step "auto-approve-database-delta-script" {
     }
 
     action {
+        environments = ["staging"]
         notes = "**Runs on Deployments Only**"
         properties = {
             Databases.AutoApproval.ReportPath = "#{Project.Database.Report.Path}\\UpgradeReport.html"
@@ -128,6 +129,7 @@ step "auto-approve-database-delta-script" {
             Octopus.Action.Template.Id = "ActionTemplates-21"
             Octopus.Action.Template.Version = "0"
         }
+        tenant_tags = ["Branch Type/Pseudo"]
         worker_pool = "default-worker-pool-1"
     }
 }
@@ -148,6 +150,7 @@ step "approve-database-delta-script" {
             Octopus.Action.Manual.Instructions = "Please approve the database delta script found in the artifacts section"
             Octopus.Action.Manual.ResponsibleTeamIds = "dbas,global/octopus-managers,global/octopus-administrators"
         }
+        tenant_tags = ["Branch Type/Pseudo"]
         worker_pool_variable = ""
     }
 }
