@@ -24,6 +24,11 @@ step "run-the-trident-database-creattion-runbook" {
     }
 
     action {
+        notes = <<-EOT
+                **Runs on Deployments Only**
+                
+                Runs the runbook to create the trident database on the current environment's Infrastructure. This can run multiple times, as it checks to see if the database already exists
+            EOT
         properties = {
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Template.Id = "ActionTemplates-3"
